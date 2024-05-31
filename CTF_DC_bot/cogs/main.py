@@ -1,3 +1,4 @@
+from scrap import scrap as event
 import discord
 from discord.ext import commands
 
@@ -9,8 +10,8 @@ class Main(commands.Cog):
 
     # 透過前綴指令觸發機器人
     @commands.command()
-    async def Test(self, ctx: commands.Context):
-        await ctx.send("Response for the test.")
+    async def upcoming_event(self, ctx: commands.Context):
+        await ctx.send(event.ctf_list)
 
     # 透過關鍵字觸發機器人
     @commands.Cog.listener()
