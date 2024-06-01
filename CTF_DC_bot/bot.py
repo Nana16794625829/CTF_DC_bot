@@ -5,7 +5,7 @@ from discord.ext import commands
 from dotenv import load_dotenv
 
 load_dotenv(".env")
-DC_bot_token = os.getenv("DC_bot_token")
+DC_bot_token = os.getenv("DC_BOT_TOKEN")
 
 
 intents = discord.Intents.all()

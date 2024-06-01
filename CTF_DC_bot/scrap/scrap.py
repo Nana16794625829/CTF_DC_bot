@@ -38,7 +38,7 @@ def get_info(row):
     # 先清除先前存取到的資料
     ctf_list.clear()
     # 遍歷表格行，跳過表頭
-    for row in rows[1:4]:  # rows[0] 是表頭
+    for row in rows[1:]:  # rows[0] 是表頭
         cells = row.find_all('td')
         if cells:
             event_name = cells[0].text.strip()  # 從第一個 <td> 中獲得文字
