@@ -34,6 +34,9 @@ def get_official_URL(event_link):
 
 
 def get_info(row):
+
+    # 先清除先前存取到的資料
+    ctf_list.clear()
     # 遍歷表格行，跳過表頭
     for row in rows[1:4]:  # rows[0] 是表頭
         cells = row.find_all('td')
@@ -42,15 +45,13 @@ def get_info(row):
             event_link = cells[0].a['href'] if cells[0].a else None  # 獲得鏈接
             date = cells[1].text.strip()
             weight = cells[4].text.strip()
+
             official_url = get_official_URL(event_link)
             if not official_url:
                 official_url = "https://ctftime.org" + event_link
 
-            cell_dict = {"event_name": event_name, "date": date, "weight": weight, "url": official_url}
-            ctf_list.append(cell_dict)
+            if float(weight) >= 25:
+                cell_dict = {"event_name": event_name, "date": date, "weight": weight, "url": official_url}
+                ctf_list.append(cell_dict)
 
     return ctf_list
-
-
-get_info(rows)
-print(ctf_list)
