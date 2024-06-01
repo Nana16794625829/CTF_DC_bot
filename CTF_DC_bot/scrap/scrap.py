@@ -9,14 +9,16 @@ headers = {
     'DNT': '1',  # Do Not Track Request Header
 }
 
-response = requests.get("https://ctftime.org/event/list/?year=2024&online=-1&format=0&restrictions=-1&upcoming=true",
-                        headers=headers)
-soup = BeautifulSoup(response.text, "html.parser")
 
+def trim(weight):
+    new_weight = ""
 
-# 尋找所有的表格行
-rows = soup.find_all('tr')
-ctf_list = []
+    for ele in str(weight):
+        if ele == "*":
+            break
+        new_weight += ele
+
+    return new_weight
 
 
 def get_official_URL(event_link):
@@ -33,8 +35,8 @@ def get_official_URL(event_link):
                 return None
 
 
-def get_info(row):
-
+def get_info(rows):
+    ctf_list = []
     # 先清除先前存取到的資料
     ctf_list.clear()
     # 遍歷表格行，跳過表頭
@@ -50,8 +52,29 @@ def get_info(row):
             if not official_url:
                 official_url = "https://ctftime.org" + event_link
 
-            if float(weight) >= 25:
+            if float(trim(weight)) >= 25:
                 cell_dict = {"event_name": event_name, "date": date, "weight": weight, "url": official_url}
                 ctf_list.append(cell_dict)
 
     return ctf_list
+
+
+# 取得即將到來的賽事資料
+def get_upcoming():
+    response = requests.get(
+        "https://ctftime.org/event/list/?year=2024&online=-1&format=0&restrictions=-1&upcoming=true",
+        headers=headers)
+    soup = BeautifulSoup(response.text, "html.parser")
+    rows = soup.find_all('tr')
+    return get_info(rows)
+
+
+def get_progressing():
+    response = requests.get(
+        "https://ctftime.org/event/list/?year=2024&online=-1&format=0&restrictions=-1&now=true",
+        headers=headers)
+    soup = BeautifulSoup(response.text, "html.parser")
+    rows = soup.find_all('tr')
+    return get_info(rows)
+
+
